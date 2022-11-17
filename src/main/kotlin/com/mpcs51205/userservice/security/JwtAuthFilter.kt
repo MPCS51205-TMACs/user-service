@@ -20,8 +20,8 @@ class JwtAuthFilter(private val jwtService: JwtService, private val auctionUserD
         try {
             val jwt = getJwtFromRequest(request)
             if (jwtService.validateToken(jwt)) {
-                val name = jwtService.getUsername(jwt)
-                val auctionUser = auctionUserDetailService.loadUserByUsername(name.toString())
+                val email = jwtService.getUsername(jwt)
+                val auctionUser = auctionUserDetailService.loadUserByUsername(email)
                 val authentication = UsernamePasswordAuthenticationToken(
                     auctionUser, null, auctionUser.authorities
                 )

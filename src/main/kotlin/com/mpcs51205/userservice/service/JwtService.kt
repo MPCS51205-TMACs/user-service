@@ -1,6 +1,7 @@
 package com.mpcs51205.userservice.service
 
 import arrow.core.Option
+import arrow.core.getOrElse
 import com.mpcs51205.userservice.models.User
 import io.github.nefilim.kjwt.*
 import org.springframework.beans.factory.annotation.Value
@@ -27,8 +28,8 @@ class JwtService {
             subject(user.id.toString())
             issuer("user-service")
             audience("mpcs51205")
-            claim("EMAIL", user.email)
-            claim("NAME", user.name)
+            claim("email", user.email)
+            claim("name", user.name)
             claim("authorities", user.getRoles())
             issuedAt(LocalDateTime.ofInstant(issuedAt, ZoneOffset.UTC))
             expiresAt(LocalDateTime.ofInstant(expiresAt, ZoneOffset.UTC))
@@ -42,7 +43,7 @@ class JwtService {
 
     fun validateToken(token: String): Boolean = verifySignature<JWSHMACAlgorithm>(token, secret).isRight()
 
-    fun getUsername(token: String): Option<String>? {
-        return decode(token).claimValue("NAME")
+    fun getUsername(token: String): String {
+        return decode(token).claimValue("EMAIL").getOrElse { throw Exception() }
     }
 }
