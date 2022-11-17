@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    username: user-service
+    password: user-service
+    url: jdbc:postgresql://localhost:5432/user
+  rabbitmq:
+    template:
+      exchange-create: user.create
+      exchange-update: user.update
+
+jwt:
+  secret: tmacs
+  duration: 12h
