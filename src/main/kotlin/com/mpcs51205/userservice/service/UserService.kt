@@ -36,12 +36,15 @@ class UserService(
         }
     }
 
-    fun deleteUser(userId: UUID) = userRepository.delete(getUserReference(userId))
+    fun deleteUser(userId: UUID) {
+        userRepository.delete(getUserReference(userId))
+        rabbitPublisher.sendDeleteEvent(userId)
+    }
 
     fun blockUser(userId: UUID) {
         val toBlock = getUserReference(userId)
         blockedUserService.block(toBlock.email)
-        userRepository.delete(toBlock)
+        deleteUser(userId)
     }
 
     fun unblockUser(email: String) {

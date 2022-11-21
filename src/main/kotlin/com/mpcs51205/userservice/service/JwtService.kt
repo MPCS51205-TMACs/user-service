@@ -44,6 +44,6 @@ class JwtService {
     fun validateToken(token: String): Boolean = verifySignature<JWSHMACAlgorithm>(token, secret).isRight()
 
     fun getUsername(token: String): String {
-        return decode(token).claimValue("EMAIL").getOrElse { throw Exception() }
+        return decode(token).claimValue("email").getOrElse { throw Exception() }
     }
 }

@@ -2,6 +2,7 @@ package com.mpcs51205.userservice.models
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.mpcs51205.userservice.event.UserUpdateEvent
 import org.hibernate.annotations.GenericGenerator
 import java.io.Serializable
 import java.util.*
@@ -25,6 +26,9 @@ class User: Serializable {
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     lateinit var password: String
+
+    @Column
+    lateinit var paymentMethod: String
 
     @Column
     var admin: Boolean = false
@@ -52,4 +56,3 @@ class UserUpdate: Serializable {
 
 }
 
-class UserUpdateEvent(val userId: UUID, val update: UserUpdate): Serializable
