@@ -5,21 +5,27 @@ import com.mpcs51205.userservice.models.User
 import com.mpcs51205.userservice.models.UserUpdate
 import com.mpcs51205.userservice.service.BlockedUserService
 import com.mpcs51205.userservice.service.UserService
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
 @RequestMapping("/user")
-class UserController(val userService: UserService, val blockedUserService: BlockedUserService) {
-    // TODO: endpoint permissions
+class UserController(val userService: UserService) {
 
     @GetMapping("/{userId}")
-    fun getUser(@PathVariable userId:UUID): User = userService.getUserById(userId)
+    fun getUser(@PathVariable userId: UUID): User = userService.getUserById(userId)
 
-    @DeleteMapping("/{userId}")
-    fun deleteUser(@PathVariable userId: UUID) = userService.deleteUser(userId)
+    @DeleteMapping
+    fun deleteUser(authentication: Authentication) {
+        val userId = UUID.fromString(authentication.name)
+        userService.deleteUser(userId)
+    }
 
-    @PutMapping("/{userId}")
-    fun updateUser(@RequestBody userUpdate: UserUpdate, @PathVariable userId: UUID) = userService.updateUser(userUpdate, userId)
+    @PutMapping
+    fun updateUser(@RequestBody userUpdate: UserUpdate, authentication: Authentication) {
+        val userId = UUID.fromString(authentication.name)
+        userService.updateUser(userUpdate, userId)
+    }
 
 }

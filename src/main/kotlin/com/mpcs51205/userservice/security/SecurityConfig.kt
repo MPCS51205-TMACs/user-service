@@ -32,7 +32,7 @@ class SecurityFilter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests { auth ->
-                auth.antMatchers("/registration","/authenticate").permitAll()
+                auth.antMatchers("/registration","/login").permitAll()
                     .antMatchers("/user/admin/**").hasRole("ADMIN")
                     .antMatchers("/user/**").hasRole("USER")
                     .and()

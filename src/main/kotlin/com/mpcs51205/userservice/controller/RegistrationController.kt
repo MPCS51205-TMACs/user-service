@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/register")
 class RegistrationController(val userService: UserService) {
-    @PostMapping("")
+    @PostMapping
     fun createUser(@RequestBody user: User): User = userService.createUser(user)
 
 }
