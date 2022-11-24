@@ -33,8 +33,8 @@ class SecurityFilter {
             .and()
             .authorizeRequests { auth ->
                 auth.antMatchers("/registration","/authenticate").permitAll()
+                    .antMatchers("/user/admin/**").hasRole("ADMIN")
                     .antMatchers("/user/**").hasRole("USER")
-                    .antMatchers("/admin/user**").hasRole("ADMIN")
                     .and()
                     .oauth2ResourceServer()
                     .bearerTokenResolver {

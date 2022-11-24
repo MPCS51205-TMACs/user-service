@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/user/admin")
 class AdminController(val userService: UserService, val blockedUserService: BlockedUserService) {
 
     @PutMapping("/{userId}/suspend")
