@@ -1,16 +1,17 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
   datasource:
     username: user-service
     password: user-service
-    url: jdbc:postgresql://localhost:5432/user
+    url: jdbc:postgresql://postgres-user:5432/user
   rabbitmq:
     template:
       exchange-create: user.create
       exchange-update: user.update
       exchange-delete: user.delete
+    host: rabbitmq-server
 
 jwt:
   secret: G+KbPeShVmYq3t6w9z$C&F)J@McQfTjW
