@@ -1,15 +1,19 @@
 package com.mpcs51205.userservice.service
 
-import arrow.core.Option
-import arrow.core.getOrElse
 import com.mpcs51205.userservice.models.User
-import io.github.nefilim.kjwt.*
+import com.nimbusds.jose.JOSEObjectType
+import com.nimbusds.jose.JWSAlgorithm
+import com.nimbusds.jose.JWSHeader
+import com.nimbusds.jose.crypto.ECDSASigner
+import com.nimbusds.jose.crypto.MACSigner
+import com.nimbusds.jwt.JWT
+import com.nimbusds.jwt.JWTClaimsSet
+import com.nimbusds.jwt.SignedJWT
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.util.*
 
 
 @Service
@@ -24,26 +28,25 @@ class JwtService {
     fun getToken(user: User): String {
         val issuedAt = Instant.now()
         val expiresAt = issuedAt.plus(duration)
-        val jwt = JWT.hs256 {
-            subject(user.id.toString())
-            issuer("user-service")
-            audience("mpcs51205")
-            claim("email", user.email)
-            claim("name", user.name)
-            claim("authorities", user.getRoles())
-            issuedAt(LocalDateTime.ofInstant(issuedAt, ZoneOffset.UTC))
-            expiresAt(LocalDateTime.ofInstant(expiresAt, ZoneOffset.UTC))
-        }
-            return jwt.sign(secret).fold({ throw Exception() }, { it.rendered })
-    }
 
-    fun decode(token: String): DecodedJWT<out JWSAlgorithm> {
-        return JWT.decode(token).fold({ throw Exception() }, { it })
-    }
+        // https://www.scottbrady91.com/kotlin/creating-signed-jwts-using-nimbus-jose-jwt
+        val header = JWSHeader.Builder(JWSAlgorithm.HS256)
+            .type(JOSEObjectType.JWT)
+            .build()
 
-    fun validateToken(token: String): Boolean = verifySignature<JWSHMACAlgorithm>(token, secret).isRight()
+        val payload = JWTClaimsSet.Builder()
+            .subject(user.id.toString())
+            .issuer("user-service")
+            .audience("mpcs51205")
+            .claim("email", user.email)
+            .claim("name", user.name)
+            .claim("authorities", user.getRoles())
+            .issueTime(Date.from(issuedAt))
+            .expirationTime(Date.from(expiresAt))
+            .build()
 
-    fun getUsername(token: String): String {
-        return decode(token).claimValue("email").getOrElse { throw Exception() }
+        val signedJWT = SignedJWT(header, payload)
+        signedJWT.sign(MACSigner(secret))
+        return signedJWT.serialize()
     }
 }

@@ -67,19 +67,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.nefilim.kjwt</groupId>
-            <artifactId>kjwt-core</artifactId>
-            <version>0.5.3</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.arrow-kt</groupId>
-            <artifactId>arrow-core</artifactId>
-            <version>1.1.4-alpha.10</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
