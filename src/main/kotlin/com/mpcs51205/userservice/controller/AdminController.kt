@@ -11,10 +11,10 @@ import java.util.*
 class AdminController(val userService: UserService, val blockedUserService: BlockedUserService) {
 
     @PutMapping("/{userId}/suspend")
-    fun suspendUser(@PathVariable userId: UUID) = userService.updateUserStatus(userId, true)
+    fun suspendUser(@PathVariable userId: UUID) = userService.updateUserStatus(userId, false)
 
     @PutMapping("/{userId}/unsuspend")
-    fun unsuspendUser(@PathVariable userId: UUID) = userService.updateUserStatus(userId, false)
+    fun unsuspendUser(@PathVariable userId: UUID) = userService.updateUserStatus(userId, true)
 
     @PostMapping("/{userId}/block")
     fun blockUser(@PathVariable userId: UUID) = userService.blockUser(userId)

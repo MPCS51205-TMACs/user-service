@@ -1,6 +1,5 @@
 package com.mpcs51205.userservice.service
 
-import com.mpcs51205.userservice.exception.AccountSuspendedException
 import com.mpcs51205.userservice.models.AuthRequest
 import com.mpcs51205.userservice.models.AuthResponse
 import com.mpcs51205.userservice.models.User
@@ -36,7 +35,7 @@ internal class AuthServiceTest {
         id = UUID.randomUUID()
         email = "email"
         name = "user"
-        suspended = true
+        active = true
     }
 
     @Test

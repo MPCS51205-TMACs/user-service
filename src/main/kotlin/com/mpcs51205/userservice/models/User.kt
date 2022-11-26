@@ -34,7 +34,7 @@ class User: Serializable {
     var admin: Boolean = false
 
     @Column
-    var suspended: Boolean = false
+    var active: Boolean = true
 
     fun getRoles(): List<String> = if (admin) listOf("ROLE_USER","ROLE_ADMIN") else listOf("ROLE_USER")
 }
@@ -44,13 +44,13 @@ class UserUpdate: Serializable {
     var name: String? = null
     var email: String? = null
     var isAdmin: Boolean? = null
-    var isSuspended: Boolean? = null
+    var paymentMethod: String? = null
 
     fun update(user: User): UserUpdateEvent {
         user.name = this.name ?: user.name
         user.email = this.email ?: user.email
         user.admin = this.isAdmin ?: user.admin
-        user.suspended = this.isSuspended ?: user.suspended
+        user.paymentMethod = this.paymentMethod ?: user.paymentMethod
         return UserUpdateEvent(user.id!!, this)
     }
 

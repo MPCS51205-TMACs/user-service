@@ -51,10 +51,10 @@ class UserService(
         blockedUserService.unblock(email)
     }
 
-    fun updateUserStatus(userId: UUID, suspended: Boolean) {
-        val userUpdate = UserUpdate()
-        userUpdate.isSuspended = suspended
-        updateUser(userUpdate, userId)
+    fun updateUserStatus(userId: UUID, isActive: Boolean) {
+        val target: User = getUserReference(userId)
+        target.active = isActive
+        rabbitPublisher.sendActivationEvent(userId, isActive)
     }
 
     fun updateUser(updateSrc: UserUpdate, targetId: UUID): User {
@@ -68,7 +68,7 @@ class UserService(
     fun getUserByAuthRequest(authRequest: AuthRequest): User {
         val user: User =
             userRepository.getUserByEmail(authRequest.email) ?: throw ResourceDoesNotExistException()
-        if (user.suspended) throw AccountSuspendedException()
+        if (user.active) throw AccountSuspendedException()
         if (user.password == authRequest.password) {
             return user
         }

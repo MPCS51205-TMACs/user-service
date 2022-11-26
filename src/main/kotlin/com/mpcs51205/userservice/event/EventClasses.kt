@@ -6,3 +6,4 @@ import java.util.*
 
 class UserUpdateEvent(val userId: UUID, val update: UserUpdate): Serializable
 class UserDeleteEvent(val userId: UUID): Serializable
+class UserActivationEvent(val userId: UUID, val isActive: Boolean): Serializable
