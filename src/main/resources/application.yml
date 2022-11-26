@@ -11,6 +11,7 @@ spring:
       exchange-create: user.create
       exchange-update: user.update
       exchange-delete: user.delete
+      exchange-activation: user.activation
     host: rabbitmq-server
 
 jwt:
