@@ -54,6 +54,7 @@ class UserService(
     fun updateUserStatus(userId: UUID, isActive: Boolean) {
         val target: User = getUserReference(userId)
         target.active = isActive
+        userRepository.save(target)
         rabbitPublisher.sendActivationEvent(userId, isActive)
     }
 
