@@ -69,7 +69,7 @@ class UserService(
     fun getUserByAuthRequest(authRequest: AuthRequest): User {
         val user: User =
             userRepository.getUserByEmail(authRequest.email) ?: throw ResourceDoesNotExistException()
-        if (user.active) throw AccountSuspendedException()
+        if (!user.active) throw AccountSuspendedException()
         if (user.password == authRequest.password) {
             return user
         }
