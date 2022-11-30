@@ -27,7 +27,8 @@ class User: Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     lateinit var password: String
 
-    @Column
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     lateinit var paymentMethod: String
 
     @Column

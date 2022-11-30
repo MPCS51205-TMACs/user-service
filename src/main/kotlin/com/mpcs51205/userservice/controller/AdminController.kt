@@ -1,5 +1,6 @@
 package com.mpcs51205.userservice.controller
 
+import com.mpcs51205.userservice.models.PaymentInfo
 import com.mpcs51205.userservice.models.User
 import com.mpcs51205.userservice.service.BlockedUserService
 import com.mpcs51205.userservice.service.UserService
@@ -8,7 +9,11 @@ import java.util.*
 
 @RestController
 @RequestMapping("/user/admin")
-class AdminController(val userService: UserService, val blockedUserService: BlockedUserService) {
+class AdminController(val userService: UserService) {
+
+    @GetMapping("/{userId}/payment")
+    fun getPaymentInfo(@PathVariable userId: UUID) = PaymentInfo(userService.getUserById(userId).paymentMethod)
+
 
     @PutMapping("/{userId}/suspend")
     fun suspendUser(@PathVariable userId: UUID) = userService.updateUserStatus(userId, false)
