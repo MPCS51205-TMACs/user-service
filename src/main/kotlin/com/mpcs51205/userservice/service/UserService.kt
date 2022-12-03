@@ -19,6 +19,8 @@ class UserService(
 ) {
     fun getUserById(userId: UUID): User = userRepository.findByIdOrNull(userId) ?: throw ResourceDoesNotExistException()
 
+    fun getUsers() = userRepository.findAll()
+
     fun createUser(user: User): User {
         if (blockedUserService.isBlocked(user.email)) {
             throw BlockedUserException(user.email)
@@ -37,8 +39,9 @@ class UserService(
     }
 
     fun deleteUser(userId: UUID) {
-        userRepository.delete(getUserReference(userId))
-        rabbitPublisher.sendDeleteEvent(userId)
+        val user : User = getUserReference(userId)
+        userRepository.delete(user)
+        rabbitPublisher.sendDeleteEvent(userId, user.revocationId)
     }
 
     fun blockUser(userId: UUID) {
@@ -53,9 +56,18 @@ class UserService(
 
     fun updateUserStatus(userId: UUID, isActive: Boolean) {
         val target: User = getUserReference(userId)
-        target.active = isActive
+
+        if (target.active == isActive){
+            return
+        }
+
+        target.apply {
+            active = isActive
+            revocationId = if (isActive) UUID.randomUUID() else revocationId
+        }
+
         userRepository.save(target)
-        rabbitPublisher.sendActivationEvent(userId, isActive)
+        rabbitPublisher.sendActivationEvent(userId, isActive, target.revocationId)
     }
 
     fun updateUser(updateSrc: UserUpdate, targetId: UUID): User {

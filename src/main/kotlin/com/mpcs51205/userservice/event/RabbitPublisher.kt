@@ -24,8 +24,8 @@ class RabbitPublisher {
 
     fun sendCreateEvent(user: User) = send(exchange = rabbitConfig.createExchange, payload = user)
     fun sendUpdateEvent(userUpdateEvent: UserUpdateEvent) = send(exchange = rabbitConfig.updateExchange, payload = userUpdateEvent)
-    fun sendDeleteEvent(userId: UUID) = send(exchange = rabbitConfig.deleteExchange, payload = UserDeleteEvent(userId))
-    fun sendActivationEvent(userId: UUID, isActive:Boolean) = send(exchange = rabbitConfig.activationExchange, payload = UserActivationEvent(userId, isActive))
+    fun sendDeleteEvent(userId: UUID, revocationId: UUID) = send(exchange = rabbitConfig.deleteExchange, payload = UserDeleteEvent(userId,revocationId))
+    fun sendActivationEvent(userId: UUID, isActive:Boolean, revocationId: UUID) = send(exchange = rabbitConfig.activationExchange, payload = UserActivationEvent(userId, isActive, revocationId))
 
     private fun send(exchange: String, payload: Serializable) {
         rabbitTemplate.convertAndSend(exchange, "", payload)

@@ -10,15 +10,15 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "auction_user", indexes = [Index(columnList = "email")])
-class User: Serializable {
+class User: Serializable, NameAndId {
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
     @Column(nullable = false)
-    var id: UUID? = null
+    override var id: UUID? = null
 
     @Column(nullable = false)
-    lateinit var name: String
+    override lateinit var name: String
 
     @Column(unique=true, nullable = false)
     lateinit var email: String
@@ -37,7 +37,13 @@ class User: Serializable {
     @Column
     var active: Boolean = true
 
+    @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    lateinit var revocationId: UUID
+
     fun getRoles(): List<String> = if (admin) listOf("ROLE_USER","ROLE_ADMIN") else listOf("ROLE_USER")
+
+    fun miniaturize(): UserMini = UserMini(id!!,name)
 }
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -57,3 +63,9 @@ class UserUpdate: Serializable {
 
 }
 
+data class UserMini(override val id: UUID, override val name: String): NameAndId
+
+interface NameAndId{
+    val id: UUID?
+    val name: String
+}

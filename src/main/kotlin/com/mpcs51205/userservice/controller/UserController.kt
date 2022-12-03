@@ -1,8 +1,6 @@
 package com.mpcs51205.userservice.controller
 
-import com.mpcs51205.userservice.models.AuthRequest
-import com.mpcs51205.userservice.models.User
-import com.mpcs51205.userservice.models.UserUpdate
+import com.mpcs51205.userservice.models.*
 import com.mpcs51205.userservice.service.BlockedUserService
 import com.mpcs51205.userservice.service.UserService
 import org.springframework.security.core.Authentication
@@ -12,6 +10,13 @@ import java.util.*
 @RestController
 @RequestMapping("/user")
 class UserController(val userService: UserService) {
+
+    @GetMapping("/all")
+    fun getUsers(@RequestParam mini: Boolean = false): List<NameAndId> = userService.getUsers().map { if (mini) it.miniaturize() else it }
+
+    @GetMapping
+    fun getMe(authentication: Authentication): User = userService.getUserById(UUID.fromString(authentication.name))
+
 
     @GetMapping("/{userId}")
     fun getUser(@PathVariable userId: UUID): User = userService.getUserById(userId)

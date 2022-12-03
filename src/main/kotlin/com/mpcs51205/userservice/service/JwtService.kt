@@ -4,9 +4,7 @@ import com.mpcs51205.userservice.models.User
 import com.nimbusds.jose.JOSEObjectType
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
-import com.nimbusds.jose.crypto.ECDSASigner
 import com.nimbusds.jose.crypto.MACSigner
-import com.nimbusds.jwt.JWT
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import org.springframework.beans.factory.annotation.Value
@@ -40,6 +38,7 @@ class JwtService {
             .audience("mpcs51205")
             .claim("email", user.email)
             .claim("name", user.name)
+            .claim("revocationId", user.revocationId.toString())
             .claim("authorities", user.getRoles())
             .issueTime(Date.from(issuedAt))
             .expirationTime(Date.from(expiresAt))

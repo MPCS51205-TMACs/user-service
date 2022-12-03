@@ -5,5 +5,5 @@ import java.io.Serializable
 import java.util.*
 
 class UserUpdateEvent(val userId: UUID, val update: UserUpdate): Serializable
-class UserDeleteEvent(val userId: UUID): Serializable
-class UserActivationEvent(val userId: UUID, val isActive: Boolean): Serializable
+class UserDeleteEvent(val userId: UUID, val revocationId: UUID): Serializable
+class UserActivationEvent(val userId: UUID, val isActive: Boolean, val revocationId: UUID?): Serializable
