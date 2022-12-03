@@ -88,6 +88,8 @@ class UserService(
         throw UnauthorizedException()
     }
 
+    fun getSuspendedAccounts() = userRepository.getUserByActiveIsFalse()
+
     private fun getUserReference(userId: UUID): User = userRepository.getReferenceById(userId)
 
 }

@@ -27,4 +27,7 @@ class AdminController(val userService: UserService) {
     @DeleteMapping("/{email}/block")
     fun unblockUser(@PathVariable email: String) = userService.unblockUser(email)
 
+    @GetMapping("/suspended")
+    fun getSuspendedAccounts()  = userService.getSuspendedAccounts()
+
 }

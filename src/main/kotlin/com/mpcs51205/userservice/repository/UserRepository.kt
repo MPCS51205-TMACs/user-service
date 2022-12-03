@@ -9,4 +9,6 @@ import java.util.*
 interface UserRepository: JpaRepository<User, UUID> {
     fun getUserByEmail(email:String): User?
 
+    fun getUserByActiveIsFalse(): Collection<User>
+
 }
