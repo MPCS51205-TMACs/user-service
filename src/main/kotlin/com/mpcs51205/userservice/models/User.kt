@@ -23,6 +23,8 @@ class User: Serializable, NameAndId {
     @Column(unique=true, nullable = false)
     lateinit var email: String
 
+
+    // do not return sensitive information with write_only
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     lateinit var password: String
@@ -30,6 +32,10 @@ class User: Serializable, NameAndId {
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     lateinit var paymentMethod: String
+
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    lateinit var homeAddress: String
 
     @Column
     var admin: Boolean = false
@@ -52,12 +58,14 @@ class UserUpdate: Serializable {
     var email: String? = null
     var isAdmin: Boolean? = null
     var paymentMethod: String? = null
+    var homeAddress: String? = null
 
     fun update(user: User): UserUpdateEvent {
         user.name = this.name ?: user.name
         user.email = this.email ?: user.email
         user.admin = this.isAdmin ?: user.admin
         user.paymentMethod = this.paymentMethod ?: user.paymentMethod
+        user.homeAddress = this.homeAddress ?: user.homeAddress
         return UserUpdateEvent(user.id!!, this)
     }
 

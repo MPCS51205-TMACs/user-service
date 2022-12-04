@@ -14,9 +14,9 @@ class UserController(val userService: UserService) {
     @GetMapping("/all")
     fun getUsers(@RequestParam mini: Boolean = false): List<NameAndId> = userService.getUsers().map { if (mini) it.miniaturize() else it }
 
+    // returns sensitive information to just "me" (not other users)
     @GetMapping
-    fun getMe(authentication: Authentication): User = userService.getUserById(UUID.fromString(authentication.name))
-
+    fun getMe(authentication: Authentication): Me = Me(userService.getUserById(UUID.fromString(authentication.name)))
 
     @GetMapping("/{userId}")
     fun getUser(@PathVariable userId: UUID): User = userService.getUserById(userId)
