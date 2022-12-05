@@ -56,14 +56,12 @@ class User: Serializable, NameAndId {
 class UserUpdate: Serializable {
     var name: String? = null
     var email: String? = null
-    var isAdmin: Boolean? = null
     var paymentMethod: String? = null
     var homeAddress: String? = null
 
     fun update(user: User): UserUpdateEvent {
         user.name = this.name ?: user.name
         user.email = this.email ?: user.email
-        user.admin = this.isAdmin ?: user.admin
         user.paymentMethod = this.paymentMethod ?: user.paymentMethod
         user.homeAddress = this.homeAddress ?: user.homeAddress
         return UserUpdateEvent(user.id!!, this)
